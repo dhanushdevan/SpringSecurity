@@ -36,16 +36,25 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterSecurity(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth->auth
-		.requestMatchers("/auth/login","/register").permitAll().anyRequest().authenticated()
-		).csrf(csrf ->csrf.disable())
-				.sessionManagement(sess-> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-						
-						)
-				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-	
-		return http.build();	
+	    http.authorizeHttpRequests(auth -> auth
+	        .requestMatchers(
+	            "/auth/login",
+	            "/register",
+	            "/swagger-ui/**",
+	            "/swagger-ui.html",
+	            "/v3/api-docs/**",
+	            "/v3/api-docs",
+	            "/webjars/**"
+	        ).permitAll()
+	        .anyRequest().authenticated()
+	    )
+	    .csrf(csrf -> csrf.disable())
+	    .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+	    .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
+	    return http.build();
 	}
+
 	
 	@Bean
 	public UserDetailsService userDeatilsserverice() {
